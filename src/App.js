@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useRef } from "react";
+import { customRequestAnimationFrame } from "./requestAnimationFrame";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const ballRef = useRef();
+
+  const moveBall = () => {
+    const start = Date.now();
+
+    customRequestAnimationFrame(function animateBall() {
+      let interval = Date.now() - start;
+      ballRef.current.style.top = interval / 3 + "px";
+      if (interval < 1000) customRequestAnimationFrame(animateBall, 1);
+    });
+  };
+
+  useEffect(() => {
+    moveBall();
+    setInterval(moveBall, 1000);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <img
+        id="ball"
+        alt="ball"
+        ref={ballRef}
+        src="https://img.icons8.com/officel/80/000000/football2--v2.png"
+        className="circle"
+      />
     </div>
   );
-}
+};
 
 export default App;
